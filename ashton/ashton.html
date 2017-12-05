@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ASHTON</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+</body>
+
+<script>
+
+if ("geolocation" in navigator) {
+/* geolocation is available */
+	console.log("geolocation is available");
+	navigator.geolocation.getCurrentPosition(function(position) {
+	//pass the latitude and longitude to a function called myFunction
+	getWeather(position.coords.latitude, position.coords.longitude);
+	});
+} else {
+	//if no geolocation is available, use the equator lat-lon coordinates
+	console.log("no geolocation");
+}
+
+function getWeather(lat, lon){
+	//test to see if variables were passed to function
+	console.log(lat + ", " + lon);
+
+	//query the wunderground api with the latitude and longitude, using those variables in the query
+
+	//BE SURE TO SWAP MY API KEY WITH YOURS
+	$.ajax({
+		url : "https://api.wunderground.com/api/e81f4372c7048507/geolookup/conditions/q/" + lat +","+ lon + ".json",
+		dataType : "jsonp",
+		success : function(parsed_json) {
+			var location = parsed_json['location']['city'];
+			console.log("you are in " + location + ".");
+			var temp_f = parsed_json['current_observation']['temp_f'];
+			console.log("the temperature in " + location + " is " + temp_f + ".");
+			var weather = parsed_json['current_observation']['weather'];
+			console.log("it's currently " + weather + " in " + location + ".")
+		}
+	});
+}
+
+
+</script>
+
+
+
+</html>
